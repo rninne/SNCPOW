@@ -1,34 +1,55 @@
 var https = require('https');
 var fs = require('fs');
+var path = require('path');
 var verbose = false;
 var debug = true;
 var folder = '';
 
-
-
 if(folder == ''){
+	//if folder is nto set, was is passed as a command arg?
 	if(process.argv[2]){
 		folder = process.argv[2];
+		//check that the folder exists
+		folderExists(folder);
 	} else {
-		console.log('Please enter a folder name to watch:');
+		//not set or passed on the command line, prompt the user for the folder.
+		chooseFolder();
+	}
+}
+
+function chooseFolder(){
+		process.stdout.write('Please enter a folder name to watch: ');
 		process.stdin.resume();
 		process.stdin.setEncoding('utf8');
 
 		process.stdin.on('data', function (chunk) {
-			var exists = fs.statSync(chunk);
-			process.stdout.write('exists: ' + exists);
-			process.stdout.write('data: ' + chunk);
+			if(folderExists(chunk.replace('\r\n',''))){
+				this.emit('end');
+			} else {
+				//ask for another folder
+				process.stdout.write('That folder does not exist!\n');
+				process.stdout.write('Please enter a folder name to watch: ');
+			}
 		});
 
 		process.stdin.on('end', function () {
-			process.stdout.write('end');
 		});
-	}
 }
 
-console.log('SNCPOW! is now running.');
-console.log('Watching folder ' + folder);
-
+function folderExists(folder){
+	var exists = false;
+	try{
+		exists = fs.lstatSync(folder).isDirectory();
+		
+		if(exists){
+			beginWatching(folder);
+		}
+	}
+	catch(e){
+		//folder does not exist
+	}
+	return exists;
+}
 
 function callServiceNow(options, call, file){
     
@@ -114,7 +135,7 @@ function insertRecord(file){
 }
 
 function parseFile(err, data){
-
+	
     var contents = data.toString();
     var propertiesPattern = /\/\*\{[\s\S]*\}\*\//m;
     
@@ -140,32 +161,18 @@ function parseFile(err, data){
     }
 }
 
-fs.watch('asdf', function (event, filename) {
-    if(debug){console.log(filename + ' was ' + event + 'd');}
-    if (filename) {
-        if(event === 'change') {
-            fs.readFile('asdf\\' + filename, parseFile);
-        }else if(event === 'rename'){
-                    
-        }
-    } else {
-        console.log('filename not provided');
-    }
-});
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+function beginWatching(folder){
+	console.log('\nSNCPOW! is now watching folder: "' + folder + '"\n');
+	fs.watch(folder, function (event, filename) {
+		if(debug){console.log(folder + '\\' + filename + ' was ' + event + 'd');}
+		if (filename) {
+			if(event === 'change') {
+				fs.readFile(folder + '\\' + filename, parseFile);
+			}else if(event === 'rename'){
+						
+			}
+		} else {
+			console.log('filename not provided');
+		}
+	});
+}
