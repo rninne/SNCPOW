@@ -1,6 +1,7 @@
 var https = require('https');
 var fs = require('fs');
 var path = require('path');
+var credentails = require('credentials');
 var verbose = false;
 var debug = true;
 var folder = 'scripts';
