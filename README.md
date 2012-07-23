@@ -4,9 +4,11 @@ SNCPOW! is a light-weight NodeJS (http://nodejs.org/) server designed to make th
 
 SNCPOW! cuts the copy-paste-update out of managing your business rules, script includes, ui macros etc.
 
-SNCPOW! allows you to use your own script editor, and 
+SNCPOW! allows you to use your own text editor, and seamlessly update scripts at the same time.
 
 SNCPOW! will watch a folder of scripts for changes and send the changes to the Service-Now instance of your choice.
+
+Bottom line, you save a local copy of a script, SNCPOW! pushes it to your instance.
 
 ###Here's how it works:
 #####This server requires the JSON webservices plugin to be turned on in your Service-Now instance.
@@ -48,7 +50,7 @@ A quick overview of the properties header:
 
 ###Future hopes
 SNCPOW! is pretty simplistic at the moment, I would like to see it add a few features.
-* ~~Credentials configuration file for use with multiple instances~~
+* ~~Credentials configuration file for use with multiple instances~~ _Done! :D_
 * More error handling and logging
 * Ability to send off a sys_id and table and SNCPOW! will pull the script from Service-Now and setup a new file
 * Ability to monitor a SVN or git repo and work in conjunction with these tools to make versioning with Service-Now more intergrated
