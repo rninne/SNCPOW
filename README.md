@@ -1,7 +1,10 @@
 #SNCPOW!
 
 SNCPOW! is a light-weight NodeJS (http://nodejs.org/) server designed to make the Service-Now admin's life much easier.
+
 SNCPOW! cuts the copy-paste-update out of managing your business rules, script includes, ui macros etc.
+
+SNCPOW! allows you to use your own script editor, and 
 
 SNCPOW! will watch a folder of scripts for changes and send the changes to the Service-Now instance of your choice.
 
