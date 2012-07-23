@@ -7,7 +7,7 @@ SNCPOW! will watch a folder of scripts for changes and send the changes to the S
 ###Here's how it works:
 
 Setup of the script is simple and uses the JSON syntax we all know:
-```
+```javascript
 /*{
 "instance":"demo05.service-now.com",
 "table":"sys_script",
@@ -24,16 +24,16 @@ Setup of the script is simple and uses the JSON syntax we all know:
 }*/
 ```
 A quick overview of the properties header:
-*instance: the URL of the Service-Now instance to upload the script to
-*table: the table to upload the script to
-*content_field: the field on the specified table where the body of the script should be put
-*record: an object which contains other optional fields to update
-	*sys_id: if set SNCPOW! will update existing record, if not SNCPOW! will insert a new record
+* instance: the URL of the Service-Now instance to upload the script to
+* table: the table to upload the script to
+* content_field: the field on the specified table where the body of the script should be put
+* record: an object which contains other optional fields to update
+	* sys_id: if set SNCPOW! will update existing record, if not SNCPOW! will insert a new record
 
 ###Future hopes
 SNCPOW! is pretty simplistic at the moment, I would like to see it add a few features.
-*Credentials configuration file for use with multiple instances
-*More error handling and logging
-*Ability to sned off a sys_id and table and SNCPOW! will pull the script from Service-Now and setup a new file
-*Ability to monitor a SVN or git repo and work in conjunction with these tools to make versioning with Service-Now more intergrated
+* Credentials configuration file for use with multiple instances
+* More error handling and logging
+* Ability to sned off a sys_id and table and SNCPOW! will pull the script from Service-Now and setup a new file
+* Ability to monitor a SVN or git repo and work in conjunction with these tools to make versioning with Service-Now more intergrated
 
