@@ -27,9 +27,12 @@ Setup of the script is simple and uses the JSON syntax we all know:
     "description":"Restrict task visibility for ess users to only those incidents where: the ess user is the caller, the incident was opened by the ess user an the ess user is on the watch list. Updated from JSON"
     }
 }*/
-//Script goes here
-var u = gs.getUserID();
-var qc = current.addQuery("caller_id", u).addOrCondition("opened_by", u).addOrCondition("watch_list", "CONTAINS", u);
+//script goes here
+var user = gs.getUserID();
+
+var incident_query = current.addQuery("caller_id", user);
+incident_query.addOrCondition("opened_by", user);
+incident_query.addOrCondition("watch_list", "CONTAINS", user);
 ```
 
 Store this as a .js file in the folder you want to watch for example "scripts".
