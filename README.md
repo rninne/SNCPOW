@@ -48,7 +48,7 @@ A quick overview of the properties header:
 
 ###Future hopes
 SNCPOW! is pretty simplistic at the moment, I would like to see it add a few features.
-* Credentials configuration file for use with multiple instances
+* ~~Credentials configuration file for use with multiple instances~~
 * More error handling and logging
 * Ability to send off a sys_id and table and SNCPOW! will pull the script from Service-Now and setup a new file
 * Ability to monitor a SVN or git repo and work in conjunction with these tools to make versioning with Service-Now more intergrated
