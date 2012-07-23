@@ -1,15 +1,16 @@
 var https = require('https');
 var fs = require('fs');
 var path = require('path');
-var credentails = require('credentials');
+var credentials = require('./credentials');
+var credentials = credentials.generate();
 var verbose = false;
 var debug = true;
 var folder = 'scripts';
 var time = new Date;
 var last_run = ['', time.getTime()];
 
-var user_name = 'admin';
-var password = 'admin';
+// var user_name = 'admin';
+// var password = 'admin';
 
 if (folder == '') {
 	//if folder is not set, was is passed as a command arg?
@@ -123,7 +124,7 @@ function updateRecord(file) {
         "path": "/" + table + ".do?JSON&sysparm_action=update&sysparm_query=sys_id=" + sys_id,
         "port": 443,
         "method": "POST",
-        "auth": user_name + ":" + password,
+        "auth": credentials[instance].user_name + ":" + credentials[instance].password,
         "Content-type": "application/json",
         "Connection-type": "Keep-alive"
     }
@@ -144,7 +145,7 @@ function insertRecord(file) {
         "path": "/" + table + ".do?JSON&sysparm_action=insert",
         "port": 443,
         "method": "POST",
-        "auth": user_name + ":" + password,
+        "auth": credentials[instance].user_name + ":" + credentials[instance].password,
         "Content-type": "application/json",
         "Connection-type": "Keep-alive"
     }
