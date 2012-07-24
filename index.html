@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html>
+
+  <head>
+    <meta charset='utf-8' />
+    <meta http-equiv="X-UA-Compatible" content="chrome=1" />
+    <meta name="description" content="Sncpow : NodeJS file watcher and uploader to Service-Now using their JSON intergration." />
+
+    <link rel="stylesheet" type="text/css" media="screen" href="stylesheets/stylesheet.css">
+
+    <title>Sncpow</title>
+  </head>
+
+  <body>
+
+    <!-- HEADER -->
+    <div id="header_wrap" class="outer">
+        <header class="inner">
+          <a id="forkme_banner" href="https://github.com/rninne/SNCPOW">View on GitHub</a>
+
+          <h1 id="project_title">Sncpow</h1>
+          <h2 id="project_tagline">NodeJS file watcher and uploader to Service-Now using their JSON intergration.</h2>
+
+            <section id="downloads">
+              <a class="zip_download_link" href="https://github.com/rninne/SNCPOW/zipball/master">Download this project as a .zip file</a>
+              <a class="tar_download_link" href="https://github.com/rninne/SNCPOW/tarball/master">Download this project as a tar.gz file</a>
+            </section>
+        </header>
+    </div>
+
+    <!-- MAIN CONTENT -->
+    <div id="main_content_wrap" class="outer">
+      <section id="main_content" class="inner">
+        <h1>SNCPOW!</h1>
+
+<p>SNCPOW! is a light-weight NodeJS (<a href="http://nodejs.org/">http://nodejs.org/</a>) server designed to make the Service-Now admin's life much easier.</p>
+
+<p>SNCPOW! cuts the copy-paste-update out of managing your business rules, script includes, ui macros etc.</p>
+
+<p>SNCPOW! allows you to use your own text editor, and seamlessly update scripts at the same time.</p>
+
+<p>SNCPOW! will watch a folder of scripts for changes and send the changes to the Service-Now instance of your choice.</p>
+
+<p>Bottom line, you save a local copy of a script, SNCPOW! pushes it to your instance.</p>
+
+<h3>Here's how it works:</h3>
+
+<h5>This server requires the JSON webservices plugin to be turned on in your Service-Now instance.</h5>
+
+<p>Setup of the script is simple and uses the JSON syntax we all know:</p>
+
+<div class="highlight"><pre><span class="cm">/*{</span>
+<span class="cm">"instance":"demo05.service-now.com",</span>
+<span class="cm">"table":"sys_script",</span>
+<span class="cm">"content_field": "script",</span>
+<span class="cm">"record":{</span>
+<span class="cm">    "sys_id":"2bc2f9b1c0a801640199f9eb0067326e",</span>
+<span class="cm">    "condition":"!gs.hasRole('itil') &amp;&amp; gs.isInteractive()",</span>
+<span class="cm">    "name":"incident query",</span>
+<span class="cm">    "when":"before",</span>
+<span class="cm">    "action_query":true,</span>
+<span class="cm">    "action_delete":true,</span>
+<span class="cm">    "description":"Restrict task visibility for ess users to only those incidents where: the ess user is the caller, the incident was opened by the ess user an the ess user is on the watch list. Updated from JSON"</span>
+<span class="cm">    }</span>
+<span class="cm">}*/</span>
+<span class="c1">//script goes here</span>
+<span class="kd">var</span> <span class="nx">user</span> <span class="o">=</span> <span class="nx">gs</span><span class="p">.</span><span class="nx">getUserID</span><span class="p">();</span>
+
+<span class="kd">var</span> <span class="nx">incident_query</span> <span class="o">=</span> <span class="nx">current</span><span class="p">.</span><span class="nx">addQuery</span><span class="p">(</span><span class="s2">"caller_id"</span><span class="p">,</span> <span class="nx">user</span><span class="p">);</span>
+<span class="nx">incident_query</span><span class="p">.</span><span class="nx">addOrCondition</span><span class="p">(</span><span class="s2">"opened_by"</span><span class="p">,</span> <span class="nx">user</span><span class="p">);</span>
+<span class="nx">incident_query</span><span class="p">.</span><span class="nx">addOrCondition</span><span class="p">(</span><span class="s2">"watch_list"</span><span class="p">,</span> <span class="s2">"CONTAINS"</span><span class="p">,</span> <span class="nx">user</span><span class="p">);</span>
+</pre></div>
+
+<p>Store this as a .js file in the folder you want to watch for example "scripts".
+Every time you modify this file an event will be sent to Node, and the script will be send the specified instance using Service-Now's JSON web services plugin.</p>
+
+<p>A quick overview of the properties header:</p>
+
+<ul>
+<li>instance: the URL of the Service-Now instance to upload the script to</li>
+<li>table: the table to upload the script to</li>
+<li>content_field: the field on the specified table where the body of the script should be put</li>
+<li>record: an object which contains other optional fields to update
+
+<ul>
+<li>sys_id: if set SNCPOW! will update existing record, if not SNCPOW! will insert a new record</li>
+</ul>
+</li>
+</ul><h3>Future hopes</h3>
+
+<p>SNCPOW! is pretty simplistic at the moment, I would like to see it add a few features.</p>
+
+<ul>
+<li>
+<del>Credentials configuration file for use with multiple instances</del> <em>Done! :D</em>
+</li>
+<li>More error handling and logging</li>
+<li>Ability to send off a sys_id and table and SNCPOW! will pull the script from Service-Now and setup a new file</li>
+<li>Ability to monitor a SVN or git repo and work in conjunction with these tools to make versioning with Service-Now more intergrated</li>
+</ul>
+      </section>
+    </div>
+
+    <!-- FOOTER  -->
+    <div id="footer_wrap" class="outer">
+      <footer class="inner">
+        <p class="copyright">Sncpow maintained by <a href="https://github.com/rninne">rninne</a></p>
+        <p>Published with <a href="http://pages.github.com">GitHub Pages</a></p>
+      </footer>
+    </div>
+
+    
+
+  </body>
+</html>
