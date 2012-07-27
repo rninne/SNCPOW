@@ -16,4 +16,4 @@ var user = gs.getUserID();
 
 var incident_query = current.addQuery("caller_id", user);
 incident_query.addOrCondition("opened_by", user);
-incident_query.addOrCondition("watch_list", "CONTAINS", user);
+incident_query.addOrCondition("watch_list", "CONTAINS", user); 

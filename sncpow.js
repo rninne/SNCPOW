@@ -118,13 +118,21 @@ function updateRecord(file) {
     var table = file.table;
     var sys_id = file.record.sys_id;
     var update = JSON.stringify(file.record);
-
+    
+    try{
+    var user_name = credentials[instance].user_name;
+    var password = credentials[instance].password;
+    }
+    catch(e){
+        
+    }
+    
     var options = {
         "host": instance,
         "path": "/" + table + ".do?JSON&sysparm_action=update&sysparm_query=sys_id=" + sys_id,
         "port": 443,
         "method": "POST",
-        "auth": credentials[instance].user_name + ":" + credentials[instance].password,
+        "auth": user_name + ":" + password,
         "Content-type": "application/json",
         "Connection-type": "Keep-alive"
     }
@@ -169,7 +177,7 @@ function parseFile(err, data) {
             var file = JSON.parse(properties);
         }
         catch(e) {
-            console.log('Parsing the file properties header failed! \nReason: ' + e + '\n');
+            console.log('Parsing the properties header failed! \nReason: ' + e + '\n');
             return;
         }
         
@@ -183,7 +191,7 @@ function parseFile(err, data) {
             insertRecord(file);
         }
     } else {
-        console.log();
+        console.log('No properties header found in this file!');
     }
 }
 
