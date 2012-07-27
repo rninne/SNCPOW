@@ -37,18 +37,34 @@
 
 <p>SNCPOW! cuts the copy-paste-update out of managing your business rules, script includes, ui macros etc.</p>
 
-<p>SNCPOW! allows you to use your own text editor, and seamlessly update scripts at the same time.</p>
-
-<p>SNCPOW! will watch a folder of scripts for changes and send the changes to the Service-Now instance of your choice.</p>
+<p>SNCPOW! allows you to use your own text editor, and seamlessly update Service-Now scripts at the same time.</p>
 
 <p>Bottom line, you save a local copy of a script, SNCPOW! pushes it to your instance.</p>
 
-<h3>Here's how it works:</h3>
+<h3>How does it work?</h3>
 
-<h5>This server requires the JSON webservices plugin to be turned on in your Service-Now instance.</h5>
+<p>SNCPOW! uses NodeJS' fs.watch() utility to watch a folder of scripts for changes.</p>
 
-<p>Setup of the script is simple and uses the JSON syntax we all know:</p>
+<p>If a sctipt is modified, SNCPOW! parses a JSON properties header in the script and sends the contents up to your Service-Now instance through the JSON webservices interface.</p>
 
+<h3>Let's get started:</h3>
+
+<h5>SNCPOW! requires the JSON webservices plugin to be turned on in your Service-Now instance.</h5>
+
+<ul>
+	<li>Install NodeJS http://nodejs.org/#download</li>
+	<li>Create a working directory on your local drive, or a network drive.</li>
+	<li>Download the sncpow.js and credentails.js file into this directory.</li>
+	<li>Create a sup-directory (for example "scripts") for SNCPOW! to watch and populate it with your Service-Now scripts as follows:
+		<ul>
+		<li>Copy the script field from a business rule Service-Now and save it as a .js file in your scripts folder.</li>
+		<li>Setup a properties header that tells SNCPOW! which instance this script comes from and what type of script it is.</li>
+		</ul>
+	</li>
+</ul>
+<p>Setup of this header is simple and uses the JSON syntax we all know! See the example below.</p>
+
+Example script:
 <div class="highlight"><pre><span class="cm">/*{</span>
 <span class="cm">"instance":"demo05.service-now.com",</span>
 <span class="cm">"table":"sys_script",</span>
@@ -71,9 +87,6 @@
 <span class="nx">incident_query</span><span class="p">.</span><span class="nx">addOrCondition</span><span class="p">(</span><span class="s2">"watch_list"</span><span class="p">,</span> <span class="s2">"CONTAINS"</span><span class="p">,</span> <span class="nx">user</span><span class="p">);</span>
 </pre></div>
 
-<p>Store this as a .js file in the folder you want to watch for example "scripts".
-Every time you modify this file an event will be sent to Node, and the script will be send the specified instance using Service-Now's JSON web services plugin.</p>
-
 <p>A quick overview of the properties header:</p>
 
 <ul>
@@ -86,17 +99,33 @@ Every time you modify this file an event will be sent to Node, and the script wi
 <li>sys_id: if set SNCPOW! will update existing record, if not SNCPOW! will insert a new record</li>
 </ul>
 </li>
-</ul><h3>Future hopes</h3>
+</ul>
+<h3>Future hopes</h3>
 
 <p>SNCPOW! is pretty simplistic at the moment, I would like to see it add a few features.</p>
 
 <ul>
+<li>Need to get my hands on a Mac to test compatibility</li>
 <li>
-<del>Credentials configuration file for use with multiple instances</del> <em>Done! :D</em>
+<del>Credentials configuration file for use with multiple instances</del> <em>Done! :D</em> rninne, 23/07/2012
 </li>
-<li>More error handling and logging</li>
-<li>Ability to send off a sys_id and table and SNCPOW! will pull the script from Service-Now and setup a new file</li>
-<li>Ability to monitor a SVN or git repo and work in conjunction with these tools to make versioning with Service-Now more intergrated</li>
+<li>More error handling and logging
+<ul>
+<li>around the credentials (would like to not have to store these in the clear)</li>
+<li>HTTP status codes returned from the Service-Now instance (eg handling 403 access denied)
+<li>Wrong sys_id?</li>
+</ul>
+</li>
+<li>Capture of the script updates in Service-Now update sets. Currently these changes are not recorded unless logged in under the same user as the one which SNCPOW! uses.</li>
+<li>Objectify the code?</li>
+<li>Node package, available through NPM.</li>
+<li>Proxy (Squid, ironport) support. SNCPOW! currently does not support HTTPS requests through a proxy, make sure you deply SNCPOW! to a platform with a clear view to your instance, through a VPN or otherwise.</li>
+<li>Ability to set up a basic properties header with at least the instance, table and sys_id filled in and SNCPOW! will pull the script from Service-Now and fill in the blanks!</li>
+<li>Ability to monitor an SVN or git repo and work in conjunction with these tools to make versioning with Service-Now more intergrated
+<ul>
+<li>Spin off git/svn plugin?</li>
+</ul>
+</li>
 </ul>
       </section>
     </div>
