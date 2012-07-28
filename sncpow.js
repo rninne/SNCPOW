@@ -1,3 +1,65 @@
+function SNCPOW (folder, credentials, debug, vebose) {
+	//folder: name of the folder to watch with this instance of SNCPOW
+	//credentails: name of the credentials file
+	
+	this.https = require('https');
+	this.fs = require('fs');
+	
+	if (fs.lstasSync(credentials).isFile()) {
+		try {
+			this.credentails = require('credentials').generate();
+		}
+		catch (e) {
+			console.log('Your credentials file is not well formed.');
+			//Throw an error;
+		}
+	}
+	
+	//flag these on or off for a more verbose running log
+	if (verbose) {
+		this.verbose = true;
+		this.debug = true;
+	} else if (debug) {
+		this.verbose = false;
+		this.debug = true;
+	} else {
+		this.verbose = false;
+		this.debug = false;
+	}
+	
+	//set the folder variable to the name of the folder you wish to watch.
+	this.folder = 'scripts';
+	this.time = new Date();
+	this.last_run = ['', time.getTime()];
+	
+	
+	
+	this.beginWatching = function (folder) {
+		console.log('\nSNCPOW! is now watching folder: "' + folder + '"\n');
+		fs.watch(folder, function (event, filename) {
+			filename = folder + '\\' + filename;
+			if (filename) {
+				if (event === 'change') {
+					var now = new Date().getTime();
+					if (verbose) {console.log('Last run: ' + last_run[0] + ' : ' + last_run[1] + ' | ' + now + '\n');}
+					if (last_run[0] == filename && last_run[1] + 1000 > now) {                
+						if (debug) {console.log('Ignoring duplicate change event for: "' + filename + '"\n');}
+					} else {
+						if (debug) {console.log(filename + ' was changed\n');}
+						last_run[0] = filename;
+						last_run[1] = now;
+						fs.readFile(filename, parseFile);
+					}
+				} else if (event === 'rename') {
+					
+				}
+			} else {
+				console.log('filename not provided');
+			}
+		});
+	}
+}
+
 var https = require('https');
 var fs = require('fs');
 var path = require('path');
@@ -8,6 +70,10 @@ var debug = true;
 var folder = 'scripts';
 var time = new Date;
 var last_run = ['', time.getTime()];
+
+
+
+
 
 if (folder == '') {
 	//if folder is not set, was is passed as a command arg?
@@ -212,3 +278,5 @@ function beginWatching(folder) {
 		}
 	});
 }
+
+exports.SNCPOW = SNCPOW;
