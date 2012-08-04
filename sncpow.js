@@ -72,10 +72,12 @@ function callServiceNow(options, call, file) {
     var req = https.request(options, function(res) {
     
         var this_ = this;
+		var instance = options.host;
+		if (verbose) {console.log('Instance contacted is ' + instance)}
         // var chunks = [];
         var chunks = '';
         
-        if (debug) {console.log('STATUS: ' + res.statusCode + '\n')};
+        //if (debug) {console.log('STATUS: ' + res.statusCode + '\n')};
         if (verbose) {console.log('HEADERS: ' + JSON.stringify(res.headers) + '\n')};
         res.setEncoding('utf8');
         
@@ -87,7 +89,22 @@ function callServiceNow(options, call, file) {
         
         res.on('end', function() {
             //chunks.join('');
-            this_.emit('payload', chunks);
+			var status = res.statusCode;
+			if (status == 200) {
+				this_.emit('payload', chunks);
+			} else {
+				switch (status) {
+					case 401:
+						console.log('Authentication error! Check your credentials file and make sure the username and password is correct for instance!');
+					break;
+					case 402:
+						
+					break;
+					//more cases needed.
+				}
+			}
+            
+			
         });
     });
     
@@ -95,15 +112,19 @@ function callServiceNow(options, call, file) {
         //console.log('PAYLOAD: ' + payload + '\n');
         var temp = JSON.parse(payload);
         var record = temp.records[0];
+		
+		// call the file builder fuction
     });
     
     req.on('error', function(e) {
         console.log('problem with request: ' + e.message);
     });
+	
     if (call == 'insert' || call == 'update') {
         var update = JSON.stringify(file.record);
         req.write(update);
     }
+	
     req.end();
 }
 
