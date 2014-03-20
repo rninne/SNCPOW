@@ -1,3 +1,4 @@
 [
-	{"caption": "SNCPOW: Upload", "command": "sncpow"}
+	{"caption": "SNCPOW: Upload", "command": "sncpow"},
+	{"caption": "SNCPOW: Initialise", "command": "init_pow"}
 ]
